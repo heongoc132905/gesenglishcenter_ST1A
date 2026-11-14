@@ -1,0 +1,1635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Starters Kingdom Rescue - Grammar & Vocabulary Quest</title>
+  <!-- Google Font: Nunito for kid-friendly rounded typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================================================
+       DESIGN TOKENS & RESET
+       ========================================================================== */
+    :root {
+      --bg-sky-top: #38bdf8;
+      --bg-sky-bottom: #bae6fd;
+      --bg-grass: #4ade80;
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --text-muted: #475569;
+      --primary: #6366f1;
+      --primary-dark: #4338ca;
+      --secondary: #f59e0b;
+      --secondary-dark: #b45309;
+      --success: #22c55e;
+      --success-dark: #15803d;
+      --danger: #ef4444;
+      --danger-dark: #b91c1c;
+      --team-a: #f43f5e;
+      --team-a-dark: #be123c;
+      --team-b: #0ea5e9;
+      --team-b-dark: #0369a1;
+      --shadow-card: 0 12px 0 rgba(15, 23, 42, 0.12), 0 18px 28px rgba(15, 23, 42, 0.16);
+      --radius-lg: 28px;
+      --radius-md: 18px;
+      --radius-sm: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Nunito', 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+      background: linear-gradient(180deg, var(--bg-sky-top) 0%, var(--bg-sky-bottom) 72%, #86efac 72%, var(--bg-grass) 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Decorative Floating Clouds */
+    .cloud {
+      position: fixed;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 999px;
+      z-index: 0;
+      pointer-events: none;
+      animation: floatCloud linear infinite;
+    }
+    .cloud::before, .cloud::after {
+      content: '';
+      position: absolute;
+      background: inherit;
+      border-radius: 50%;
+    }
+    .cloud-1 { width: 140px; height: 46px; top: 8%; left: -160px; animation-duration: 38s; }
+    .cloud-1::before { width: 64px; height: 64px; top: -30px; left: 20px; }
+    .cloud-1::after { width: 48px; height: 48px; top: -20px; left: 72px; }
+
+    .cloud-2 { width: 180px; height: 54px; top: 22%; left: -200px; animation-duration: 52s; animation-delay: 10s; }
+    .cloud-2::before { width: 80px; height: 80px; top: -38px; left: 28px; }
+    .cloud-2::after { width: 60px; height: 60px; top: -24px; left: 94px; }
+
+    @keyframes floatCloud {
+      from { transform: translateX(0); }
+      to { transform: translateX(calc(100vw + 250px)); }
+    }
+
+    /* Confetti Canvas */
+    #confetti-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    /* ==========================================================================
+       TOP NAVIGATION / HUD BAR
+       ========================================================================== */
+    .hud-bar {
+      width: 100%;
+      max-width: 1080px;
+      padding: 14px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      z-index: 10;
+    }
+
+    .hud-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #ffffff;
+      padding: 8px 18px;
+      border-radius: 999px;
+      box-shadow: 0 5px 0 rgba(15, 23, 42, 0.12);
+      font-weight: 900;
+      font-size: 1.1rem;
+      color: var(--primary-dark);
+      cursor: pointer;
+    }
+
+    .hud-stats {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .stat-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #ffffff;
+      padding: 8px 16px;
+      border-radius: 999px;
+      box-shadow: 0 5px 0 rgba(15, 23, 42, 0.12);
+      font-weight: 800;
+      font-size: 1.05rem;
+    }
+
+    .stat-pill.team-a {
+      border: 3px solid var(--team-a);
+      color: var(--team-a-dark);
+    }
+    .stat-pill.team-b {
+      border: 3px solid var(--team-b);
+      color: var(--team-b-dark);
+    }
+    .stat-pill.active-turn {
+      transform: scale(1.07);
+      background: #fef9c3;
+      box-shadow: 0 0 0 4px #facc15, 0 6px 0 rgba(15, 23, 42, 0.15);
+    }
+
+    .icon-btn {
+      background: #ffffff;
+      border: none;
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-family: inherit;
+      font-weight: 800;
+      font-size: 1rem;
+      color: var(--text-main);
+      box-shadow: 0 5px 0 rgba(15, 23, 42, 0.14);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+    }
+    .icon-btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 1px 0 rgba(15, 23, 42, 0.14);
+    }
+
+    /* ==========================================================================
+       MAIN CONTAINER & SCREENS
+       ========================================================================== */
+    .main-stage {
+      width: 100%;
+      max-width: 1020px;
+      padding: 8px 20px 36px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 5;
+    }
+
+    .screen {
+      width: 100%;
+      display: none;
+      animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .screen.active {
+      display: block;
+    }
+
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.92) translateY(14px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .card-panel {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      padding: 28px 32px;
+      box-shadow: var(--shadow-card);
+      border: 4px solid #e2e8f0;
+      text-align: center;
+    }
+
+    /* ==========================================================================
+       3D CARTOON BUTTONS
+       ========================================================================== */
+    .btn-3d {
+      font-family: inherit;
+      font-weight: 900;
+      font-size: 1.2rem;
+      padding: 14px 28px;
+      border-radius: var(--radius-md);
+      border: none;
+      color: #ffffff;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.15s ease;
+      text-shadow: 0 2px 0 rgba(0, 0, 0, 0.2);
+    }
+    .btn-3d:hover {
+      filter: brightness(1.05);
+    }
+    .btn-3d:active {
+      transform: translateY(5px);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      box-shadow: 0 6px 0 var(--primary-dark);
+    }
+    .btn-primary:active { box-shadow: 0 1px 0 var(--primary-dark); }
+
+    .btn-secondary {
+      background: var(--secondary);
+      box-shadow: 0 6px 0 var(--secondary-dark);
+    }
+    .btn-secondary:active { box-shadow: 0 1px 0 var(--secondary-dark); }
+
+    .btn-success {
+      background: var(--success);
+      box-shadow: 0 6px 0 var(--success-dark);
+    }
+    .btn-success:active { box-shadow: 0 1px 0 var(--success-dark); }
+
+    .btn-team-a {
+      background: var(--team-a);
+      box-shadow: 0 6px 0 var(--team-a-dark);
+    }
+    .btn-team-a:active { box-shadow: 0 1px 0 var(--team-a-dark); }
+
+    .btn-team-b {
+      background: var(--team-b);
+      box-shadow: 0 6px 0 var(--team-b-dark);
+    }
+    .btn-team-b:active { box-shadow: 0 1px 0 var(--team-b-dark); }
+
+    /* ==========================================================================
+       TITLE / START SCREEN
+       ========================================================================== */
+    .hero-banner {
+      background: linear-gradient(135deg, #fef08a 0%, #fde047 100%);
+      border: 4px solid #eab308;
+      border-radius: var(--radius-md);
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    .hero-emojis {
+      font-size: 3.2rem;
+      margin-bottom: 8px;
+      letter-spacing: 6px;
+      animation: bounceSlow 2.4s ease-in-out infinite;
+    }
+    @keyframes bounceSlow {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    .hero-title {
+      font-size: clamp(1.8rem, 4vw, 2.7rem);
+      font-weight: 900;
+      color: #854d0e;
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+    .hero-subtitle {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #713f12;
+    }
+
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 18px;
+      margin-top: 20px;
+    }
+    .mode-card {
+      background: #f8fafc;
+      border: 3px solid #cbd5e1;
+      border-radius: var(--radius-md);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .mode-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+    }
+    .mode-icon {
+      font-size: 3rem;
+    }
+    .mode-title {
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: var(--text-main);
+    }
+    .mode-desc {
+      font-size: 0.98rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    /* ==========================================================================
+       KINGDOM ADVENTURE MAP SCREEN
+       ========================================================================== */
+    .map-header {
+      margin-bottom: 20px;
+    }
+    .map-header h2 {
+      font-size: 1.9rem;
+      font-weight: 900;
+      color: var(--primary-dark);
+    }
+    .map-header p {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .stages-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .stage-node {
+      background: #f8fafc;
+      border: 4px solid #cbd5e1;
+      border-radius: var(--radius-md);
+      padding: 18px;
+      text-align: left;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .stage-node:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+      box-shadow: 0 8px 18px rgba(99, 102, 241, 0.18);
+    }
+    .stage-node.completed {
+      background: #f0fdf4;
+      border-color: var(--success);
+    }
+    .stage-node.boss-node {
+      background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+      border-color: #f59e0b;
+    }
+
+    .stage-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .stage-badge {
+      background: var(--primary);
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 900;
+      padding: 4px 12px;
+      border-radius: 999px;
+      text-transform: uppercase;
+    }
+    .stage-node.completed .stage-badge {
+      background: var(--success);
+    }
+    .stage-node.boss-node .stage-badge {
+      background: #d97706;
+    }
+    .stage-stars {
+      font-size: 1.15rem;
+      letter-spacing: 2px;
+    }
+    .stage-emoji {
+      font-size: 2.5rem;
+      margin: 4px 0;
+    }
+    .stage-name {
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: var(--text-main);
+    }
+    .stage-topic {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    /* ==========================================================================
+       GAMEPLAY STAGE SCREEN
+       ========================================================================== */
+    .stage-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .stage-pill-title {
+      background: #eef2ff;
+      color: var(--primary-dark);
+      font-weight: 900;
+      font-size: 1.05rem;
+      padding: 6px 16px;
+      border-radius: 999px;
+      border: 2px solid #c7d2fe;
+    }
+
+    .progress-track {
+      flex: 1;
+      min-width: 160px;
+      height: 18px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      border: 2px solid #cbd5e1;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #22c55e, #10b981);
+      border-radius: 999px;
+      transition: width 0.35s ease;
+    }
+
+    .turn-banner {
+      display: inline-block;
+      padding: 6px 20px;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: 1.05rem;
+      margin-bottom: 12px;
+      color: #ffffff;
+    }
+    .turn-banner.team-a { background: var(--team-a); }
+    .turn-banner.team-b { background: var(--team-b); }
+
+    /* Visual Scene Box (Emojis, Custom SVG Prepositions, Crazy Color/Size Objects) */
+    .visual-showcase {
+      background: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 100%);
+      border: 3px solid #bae6fd;
+      border-radius: var(--radius-md);
+      padding: 20px;
+      margin: 10px auto 18px;
+      max-width: 560px;
+      min-height: 165px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .showcase-emoji {
+      font-size: 5rem;
+      line-height: 1.1;
+      filter: drop-shadow(0 6px 8px rgba(0,0,0,0.12));
+      transition: transform 0.3s ease;
+    }
+    .showcase-label {
+      margin-top: 8px;
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: #0369a1;
+      background: rgba(255, 255, 255, 0.85);
+      padding: 4px 14px;
+      border-radius: 999px;
+    }
+
+    .question-text {
+      font-size: clamp(1.3rem, 2.8vw, 1.75rem);
+      font-weight: 900;
+      color: var(--text-main);
+      margin-bottom: 20px;
+      line-height: 1.35;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+    .options-grid.two-cols {
+      grid-template-columns: repeat(2, 1fr);
+      max-width: 540px;
+    }
+
+    .option-btn {
+      font-family: inherit;
+      font-size: 1.25rem;
+      font-weight: 800;
+      padding: 16px 20px;
+      border-radius: var(--radius-md);
+      background: #f8fafc;
+      color: var(--text-main);
+      border: 3px solid #cbd5e1;
+      box-shadow: 0 6px 0 #cbd5e1;
+      cursor: pointer;
+      transition: transform 0.1s ease, background 0.15s ease, border-color 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .option-btn:hover:not(:disabled) {
+      background: #eef2ff;
+      border-color: var(--primary);
+      box-shadow: 0 6px 0 #a5b4fc;
+      transform: translateY(-2px);
+    }
+    .option-btn:active:not(:disabled) {
+      transform: translateY(4px);
+      box-shadow: 0 1px 0 #cbd5e1;
+    }
+    .option-btn:disabled {
+      cursor: default;
+    }
+
+    .option-btn.correct {
+      background: #dcfce7 !important;
+      border-color: var(--success) !important;
+      box-shadow: 0 6px 0 var(--success-dark) !important;
+      color: #14532d !important;
+      animation: pulseSuccess 0.45s ease;
+    }
+    .option-btn.wrong {
+      background: #fee2e2 !important;
+      border-color: var(--danger) !important;
+      box-shadow: 0 6px 0 var(--danger-dark) !important;
+      color: #7f1d1d !important;
+      animation: shakeError 0.4s ease;
+    }
+
+    @keyframes pulseSuccess {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.06); }
+      100% { transform: scale(1); }
+    }
+    @keyframes shakeError {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+
+    /* Feedback Banner */
+    .feedback-box {
+      margin-top: 20px;
+      padding: 16px 20px;
+      border-radius: var(--radius-md);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      animation: popIn 0.25s ease;
+    }
+    .feedback-box.show {
+      display: flex;
+    }
+    .feedback-box.is-correct {
+      background: #dcfce7;
+      border: 3px solid #22c55e;
+      color: #14532d;
+    }
+    .feedback-box.is-wrong {
+      background: #fef3c7;
+      border: 3px solid #f59e0b;
+      color: #78350f;
+    }
+    .feedback-msg {
+      font-size: 1.15rem;
+      font-weight: 800;
+    }
+
+    /* ==========================================================================
+       VICTORY CERTIFICATE SCREEN
+       ========================================================================== */
+    .certificate-frame {
+      background: linear-gradient(180deg, #fffbeb 0%, #ffffff 100%);
+      border: 8px double #f59e0b;
+      border-radius: var(--radius-lg);
+      padding: 28px 24px;
+      position: relative;
+    }
+    .cert-crown {
+      font-size: 4rem;
+      margin-bottom: 6px;
+      animation: bounceSlow 2s infinite;
+    }
+    .cert-title {
+      font-size: clamp(1.7rem, 3.5vw, 2.4rem);
+      font-weight: 900;
+      color: #b45309;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .cert-sub {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #475569;
+      margin: 6px 0 18px;
+    }
+    .cert-score-cards {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+    .cert-box {
+      background: #ffffff;
+      border: 3px solid #fde68a;
+      border-radius: var(--radius-md);
+      padding: 14px 24px;
+      min-width: 180px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+    }
+    .cert-box-label {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+    .cert-box-val {
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--primary-dark);
+    }
+    .cert-winner-banner {
+      font-size: 1.4rem;
+      font-weight: 900;
+      padding: 10px 22px;
+      border-radius: 999px;
+      background: #fef08a;
+      color: #854d0e;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 600px) {
+      .card-panel { padding: 20px 16px; }
+      .options-grid.two-cols { grid-template-columns: 1fr; }
+      .showcase-emoji { font-size: 4rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Floating Clouds -->
+  <div class="cloud cloud-1"></div>
+  <div class="cloud cloud-2"></div>
+
+  <!-- Confetti Overlay -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Top HUD Bar -->
+  <header class="hud-bar">
+    <div class="hud-brand" onclick="goToMap()" title="Back to Kingdom Map">
+      <span>🏰</span>
+      <span>Starters Kingdom</span>
+    </div>
+
+    <div class="hud-stats" id="hud-stats">
+      <!-- Dynamic score pills injected here -->
+    </div>
+
+    <div style="display: flex; gap: 8px;">
+      <button class="icon-btn" id="btn-map-nav" onclick="goToMap()" style="display: none;">🗺️ Map</button>
+      <button class="icon-btn" id="btn-sound" onclick="toggleSound()">🔊 Sound: ON</button>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="main-stage">
+    <!-- ====================================================================
+         SCREEN 1: START & MODE SELECTION
+         ==================================================================== -->
+    <section id="screen-start" class="screen active">
+      <div class="card-panel">
+        <div class="hero-banner">
+          <div class="hero-emojis">👑 🧸 🚀 🦁 🎨</div>
+          <h1 class="hero-title">Starters Kingdom Rescue</h1>
+          <p class="hero-subtitle">Grammar &amp; Vocabulary Quest • Welcome to Unit 10</p>
+        </div>
+
+        <p style="font-size: 1.15rem; font-weight: 800; color: var(--text-main);">
+          Choose your adventure mode to rescue the Toy Kingdom!
+        </p>
+
+        <div class="mode-grid">
+          <div class="mode-card">
+            <div class="mode-icon">🦸</div>
+            <div class="mode-title">1-Player Quest</div>
+            <div class="mode-desc">Collect stars &amp; gems across all 5 Kingdom Stages on your own!</div>
+            <button class="btn-3d btn-primary" onclick="startGame('single')">Play Solo ▶</button>
+          </div>
+
+          <div class="mode-card">
+            <div class="mode-icon">⚔️</div>
+            <div class="mode-title">2-Team Class Battle</div>
+            <div class="mode-desc">Red Team vs. Blue Team take turns answering to win the crown!</div>
+            <button class="btn-3d btn-secondary" onclick="startGame('teams')">Team Battle ▶</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SCREEN 2: 5-STAGE KINGDOM ADVENTURE MAP
+         ==================================================================== -->
+    <section id="screen-map" class="screen">
+      <div class="card-panel">
+        <div class="map-header">
+          <h2>🗺️ Kingdom Adventure Map</h2>
+          <p>Select a stage to earn Stars (⭐) and unlock the Victory Certificate!</p>
+        </div>
+
+        <div class="stages-grid" id="stages-grid">
+          <!-- Stage cards generated by JS -->
+        </div>
+
+        <div style="display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;">
+          <button class="btn-3d btn-success" id="btn-claim-cert" onclick="showCertificate()">
+            🏆 View Victory Certificate
+          </button>
+          <button class="btn-3d btn-primary" onclick="resetToStart()">
+            🔄 Change Mode
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SCREEN 3: STAGE GAMEPLAY
+         ==================================================================== -->
+    <section id="screen-play" class="screen">
+      <div class="card-panel">
+        <div class="stage-topbar">
+          <span class="stage-pill-title" id="play-stage-title">Stage 1</span>
+          <div class="progress-track">
+            <div class="progress-fill" id="play-progress-fill"></div>
+          </div>
+          <span class="stage-pill-title" id="play-q-counter">1 / 6</span>
+        </div>
+
+        <div id="turn-indicator-wrap"></div>
+
+        <!-- Illustrated Visual Scene -->
+        <div class="visual-showcase" id="visual-showcase"></div>
+
+        <!-- Prompt / Question -->
+        <div class="question-text" id="question-text"></div>
+
+        <!-- Answer Buttons -->
+        <div class="options-grid" id="options-grid"></div>
+
+        <!-- Instant Feedback & Hint -->
+        <div class="feedback-box" id="feedback-box">
+          <div class="feedback-msg" id="feedback-msg"></div>
+          <button class="btn-3d btn-primary" id="btn-next-q" onclick="nextQuestion()">Next Question ➔</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SCREEN 4: VICTORY CERTIFICATE
+         ==================================================================== -->
+    <section id="screen-victory" class="screen">
+      <div class="card-panel certificate-frame">
+        <div class="cert-crown">👑🏆👑</div>
+        <h2 class="cert-title">Kingdom Hero Certificate</h2>
+        <p class="cert-sub">Congratulations! You completed the Starters Grammar &amp; Vocabulary Quest!</p>
+
+        <div id="cert-winner-area"></div>
+
+        <div class="cert-score-cards" id="cert-score-cards"></div>
+
+        <div style="display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;">
+          <button class="btn-3d btn-secondary" onclick="goToMap()">🗺️ Back to Map</button>
+          <button class="btn-3d btn-success" onclick="resetToStart()">🎮 Play Again</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    /* ========================================================================
+       1. WEB AUDIO API SOUND SYNTHESIZER (NO EXTERNAL AUDIO FILES)
+       ======================================================================== */
+    const SoundFX = (() => {
+      let ctx = null;
+      let muted = false;
+
+      function getCtx() {
+        if (!ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (AudioCtx) ctx = new AudioCtx();
+        }
+        if (ctx && ctx.state === 'suspended') {
+          ctx.resume();
+        }
+        return ctx;
+      }
+
+      function playTone(freq, type, duration, delay = 0, gainVal = 0.18) {
+        if (muted) return;
+        const audio = getCtx();
+        if (!audio) return;
+        const osc = audio.createOscillator();
+        const gain = audio.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audio.currentTime + delay);
+
+        gain.gain.setValueAtTime(0.001, audio.currentTime + delay);
+        gain.gain.exponentialRampToValueAtTime(gainVal, audio.currentTime + delay + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + delay + duration);
+
+        osc.connect(gain);
+        gain.connect(audio.destination);
+        osc.start(audio.currentTime + delay);
+        osc.stop(audio.currentTime + delay + duration + 0.02);
+      }
+
+      return {
+        isMuted: () => muted,
+        toggleMute: () => {
+          muted = !muted;
+          return muted;
+        },
+        click: () => {
+          playTone(520, 'sine', 0.09, 0, 0.14);
+        },
+        correct: () => {
+          playTone(523.25, 'triangle', 0.14, 0, 0.22);     // C5
+          playTone(659.25, 'triangle', 0.14, 0.09, 0.22);  // E5
+          playTone(783.99, 'triangle', 0.28, 0.18, 0.24);  // G5
+        },
+        wrong: () => {
+          playTone(260, 'sawtooth', 0.18, 0, 0.14);
+          playTone(210, 'sawtooth', 0.26, 0.14, 0.14);
+        },
+        fanfare: () => {
+          const notes = [523.25, 659.25, 783.99, 1046.50, 783.99, 1046.50];
+          const times = [0, 0.12, 0.24, 0.36, 0.54, 0.68];
+          const durs  = [0.12, 0.12, 0.12, 0.16, 0.12, 0.45];
+          notes.forEach((n, i) => playTone(n, 'triangle', durs[i], times[i], 0.24));
+        }
+      };
+    })();
+
+    function toggleSound() {
+      const isMuted = SoundFX.toggleMute();
+      const btn = document.getElementById('btn-sound');
+      btn.textContent = isMuted ? '🔇 Sound: OFF' : '🔊 Sound: ON';
+      if (!isMuted) SoundFX.click();
+    }
+
+    /* ========================================================================
+       2. CONFETTI CELEBRATION ENGINE
+       ======================================================================== */
+    const Confetti = (() => {
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      let pieces = [];
+      let animId = null;
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      function launch(count = 70) {
+        const colors = ['#f43f5e', '#3b82f6', '#22c55e', '#f59e0b', '#a855f7', '#ec4899'];
+        for (let i = 0; i < count; i++) {
+          pieces.push({
+            x: Math.random() * canvas.width,
+            y: -20 - Math.random() * 120,
+            w: 10 + Math.random() * 8,
+            h: 6 + Math.random() * 6,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            vx: (Math.random() - 0.5) * 5,
+            vy: 3 + Math.random() * 5,
+            rot: Math.random() * 360,
+            vRot: (Math.random() - 0.5) * 10
+          });
+        }
+        if (!animId) loop();
+      }
+
+      function loop() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        pieces.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rot += p.vRot;
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate((p.rot * Math.PI) / 180);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+          ctx.restore();
+        });
+        pieces = pieces.filter(p => p.y < canvas.height + 30);
+        if (pieces.length > 0) {
+          animId = requestAnimationFrame(loop);
+        } else {
+          animId = null;
+        }
+      }
+
+      return { launch };
+    })();
+
+    /* ========================================================================
+       3. SVG PREPOSITION SCENE GENERATOR (IN, ON, UNDER, BY)
+       ======================================================================== */
+    function renderPrepositionSVG(sceneType) {
+      if (sceneType === 'hat_on_mat') {
+        return `
+          <svg width="240" height="145" viewBox="0 0 240 145" aria-label="A hat on a mat">
+            <!-- Mat -->
+            <ellipse cx="120" cy="112" rx="95" ry="22" fill="#f59e0b" stroke="#b45309" stroke-width="4"/>
+            <ellipse cx="120" cy="112" rx="75" ry="14" fill="#fef3c7" stroke="#d97706" stroke-width="2" stroke-dasharray="6 4"/>
+            <!-- Hat ON the mat -->
+            <ellipse cx="120" cy="96" rx="48" ry="12" fill="#3b82f6" stroke="#1d4ed8" stroke-width="3"/>
+            <path d="M90 96 C90 55, 150 55, 150 96 Z" fill="#60a5fa" stroke="#1d4ed8" stroke-width="3"/>
+            <rect x="91" y="84" width="58" height="8" rx="3" fill="#ef4444"/>
+          </svg>
+        `;
+      }
+      if (sceneType === 'kitten_in_box') {
+        return `
+          <svg width="240" height="145" viewBox="0 0 240 145" aria-label="A kitten in a box">
+            <!-- Back of Box -->
+            <rect x="65" y="65" width="110" height="65" rx="6" fill="#d97706" stroke="#78350f" stroke-width="3"/>
+            <!-- Kitten peeking IN the box -->
+            <text x="120" y="76" font-size="54" text-anchor="middle">🐱</text>
+            <!-- Front of Box -->
+            <rect x="65" y="78" width="110" height="55" rx="6" fill="#f59e0b" stroke="#78350f" stroke-width="3"/>
+            <text x="120" y="112" font-size="16" font-weight="900" fill="#78350f" text-anchor="middle">TOY BOX</text>
+          </svg>
+        `;
+      }
+      if (sceneType === 'ball_under_chair') {
+        return `
+          <svg width="240" height="145" viewBox="0 0 240 145" aria-label="A ball under a chair">
+            <!-- Floor line -->
+            <line x1="25" y1="132" x2="215" y2="132" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+            <!-- Chair Back & Seat -->
+            <rect x="75" y="20" width="12" height="65" rx="4" fill="#8b5cf6" stroke="#5b21b6" stroke-width="3"/>
+            <rect x="75" y="75" width="85" height="12" rx="4" fill="#a78bfa" stroke="#5b21b6" stroke-width="3"/>
+            <!-- Chair Legs -->
+            <rect x="80" y="87" width="10" height="45" fill="#7c3aed"/>
+            <rect x="145" y="87" width="10" height="45" fill="#7c3aed"/>
+            <!-- Ball UNDER the chair -->
+            <text x="118" y="126" font-size="34" text-anchor="middle">⚽</text>
+          </svg>
+        `;
+      }
+      if (sceneType === 'ship_by_bus') {
+        return `
+          <svg width="260" height="145" viewBox="0 0 260 145" aria-label="A ship by a bus">
+            <line x1="15" y1="125" x2="245" y2="125" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+            <!-- Ship BY the bus -->
+            <text x="72" y="108" font-size="64" text-anchor="middle">🚢</text>
+            <text x="184" y="108" font-size="64" text-anchor="middle">🚌</text>
+          </svg>
+        `;
+      }
+      if (sceneType === 'pen_on_book') {
+        return `
+          <svg width="240" height="145" viewBox="0 0 240 145" aria-label="A pen on a book">
+            <!-- Closed Book -->
+            <rect x="55" y="82" width="130" height="34" rx="6" fill="#10b981" stroke="#047857" stroke-width="3"/>
+            <rect x="62" y="92" width="120" height="16" rx="3" fill="#ffffff"/>
+            <!-- Pen ON the book -->
+            <text x="120" y="76" font-size="46" text-anchor="middle">🖊️</text>
+          </svg>
+        `;
+      }
+      if (sceneType === 'frog_under_umbrella') {
+        return `
+          <svg width="240" height="145" viewBox="0 0 240 145" aria-label="A frog under an umbrella">
+            <line x1="30" y1="132" x2="210" y2="132" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+            <!-- Umbrella -->
+            <text x="120" y="75" font-size="72" text-anchor="middle">☂️</text>
+            <!-- Frog UNDER umbrella -->
+            <text x="120" y="126" font-size="38" text-anchor="middle">🐸</text>
+          </svg>
+        `;
+      }
+      return '';
+    }
+
+    /* ========================================================================
+       4. CURRICULUM QUESTION BANK (5 STAGES COVERING ALL NOTES)
+       ======================================================================== */
+    const STAGES_DATA = [
+      {
+        id: 0,
+        badge: 'Stage 1',
+        emoji: '🍎☂️',
+        title: 'Magic Vowel Gate',
+        topic: 'A vs. An (u, e, o, a, i)',
+        twoCols: true,
+        questions: [
+          {
+            emoji: '🍎',
+            label: 'apple',
+            prompt: 'Choose the right word: It is _____ apple.',
+            options: ['a', 'an'],
+            answer: 'an',
+            hint: 'Use "an" before vowel sounds (u, e, o, a, i) → an apple!'
+          },
+          {
+            emoji: '☂️',
+            label: 'umbrella',
+            prompt: 'Choose the right word: Is it _____ umbrella?',
+            options: ['a', 'an'],
+            answer: 'an',
+            hint: '"Umbrella" starts with the vowel "u" → an umbrella!'
+          },
+          {
+            emoji: '🚚',
+            label: 'lorry',
+            prompt: 'Choose the right word: Look! It\'s _____ lorry.',
+            options: ['a', 'an'],
+            answer: 'a',
+            hint: '"Lorry" starts with "l" (not u, e, o, a, i) → a lorry!'
+          },
+          {
+            emoji: '🍊',
+            label: 'orange',
+            prompt: 'Choose the right word: I have _____ orange.',
+            options: ['a', 'an'],
+            answer: 'an',
+            hint: '"Orange" starts with the vowel "o" → an orange!'
+          },
+          {
+            emoji: '👸',
+            label: 'princess',
+            prompt: 'Choose the right word: She is _____ pretty princess.',
+            options: ['a', 'an'],
+            answer: 'a',
+            hint: '"Pretty" starts with "p" → a pretty princess!'
+          },
+          {
+            emoji: '🤡',
+            label: 'old clown',
+            prompt: 'Careful! Look at the first sound: He is _____ old clown.',
+            options: ['a', 'an'],
+            answer: 'an',
+            hint: '"Old" starts with the vowel "o" → an old clown!'
+          }
+        ]
+      },
+      {
+        id: 1,
+        badge: 'Stage 2',
+        emoji: '🔍📦',
+        title: "Detective's Hideout",
+        topic: 'Positions: in, on, under, by',
+        twoCols: true,
+        questions: [
+          {
+            svgScene: 'hat_on_mat',
+            label: 'Hat & Mat',
+            prompt: 'Where is the hat? — The hat is _____ the mat.',
+            options: ['on', 'in', 'under', 'by'],
+            answer: 'on',
+            hint: 'The hat is sitting right on top of the mat → ON the mat!'
+          },
+          {
+            svgScene: 'kitten_in_box',
+            label: 'Kitten & Box',
+            prompt: 'Where is the kitten? — It is _____ the toy box.',
+            options: ['on', 'in', 'under', 'by'],
+            answer: 'in',
+            hint: 'The kitten is inside the box → IN the toy box!'
+          },
+          {
+            svgScene: 'ball_under_chair',
+            label: 'Ball & Chair',
+            prompt: 'Where is the ball? — The ball is _____ the chair.',
+            options: ['in', 'on', 'under', 'by'],
+            answer: 'under',
+            hint: 'The ball is below the chair → UNDER the chair!'
+          },
+          {
+            svgScene: 'ship_by_bus',
+            label: 'Ship & Bus',
+            prompt: 'Where is the ship? — The ship is _____ the bus.',
+            options: ['in', 'under', 'on', 'by'],
+            answer: 'by',
+            hint: 'The ship is next to the bus → BY the bus!'
+          },
+          {
+            svgScene: 'pen_on_book',
+            label: 'Pen & Book',
+            prompt: 'Look! The blue pen is _____ the green book.',
+            options: ['on', 'under', 'in', 'by'],
+            answer: 'on',
+            hint: 'The pen is resting on top of the book → ON the book!'
+          },
+          {
+            svgScene: 'frog_under_umbrella',
+            label: 'Frog & Umbrella',
+            prompt: 'Where is the frog? — It is _____ the umbrella.',
+            options: ['on', 'in', 'under', 'by'],
+            answer: 'under',
+            hint: 'The frog is hiding beneath the umbrella → UNDER the umbrella!'
+          }
+        ]
+      },
+      {
+        id: 2,
+        badge: 'Stage 3',
+        emoji: '🎨📏',
+        title: 'Crazy Color & Size Lab',
+        topic: 'Describing Objects & Animals',
+        twoCols: false,
+        questions: [
+          {
+            emoji: '🚒',
+            customStyle: 'filter: hue-rotate(0deg);',
+            label: 'Color + Vehicle',
+            prompt: 'What is it? (Color + Noun)',
+            options: ['It\'s a red lorry.', 'It\'s a lorry red.', 'It\'s an red lorry.'],
+            answer: 'It\'s a red lorry.',
+            hint: 'In English, color comes BEFORE the noun: It\'s a red lorry!'
+          },
+          {
+            emoji: '🐍',
+            label: 'Long & Thin',
+            prompt: 'Look at the snake! How does it look?',
+            options: [
+              'Look! The snake is long and thin.',
+              'Look! The snake is fat and short.',
+              'Look! The snake is a pink car.'
+            ],
+            answer: 'Look! The snake is long and thin.',
+            hint: 'A snake has a long and thin body → The snake is long and thin!'
+          },
+          {
+            emoji: '✈️',
+            label: 'Fast vs. Slow',
+            prompt: 'The plane flies high in the sky. It is very _____!',
+            options: ['fast', 'slow', 'thin'],
+            answer: 'fast',
+            hint: 'A plane moves very quickly → fast!'
+          },
+          {
+            emoji: '🧸',
+            label: 'Color: Brown • Size: Big',
+            prompt: 'Describe this teddy bear:',
+            options: [
+              'This is my teddy bear. It is brown. It is big.',
+              'This is my chair. It is purple. It is small.',
+              'This is my bike. It is grey. It is fast.'
+            ],
+            answer: 'This is my teddy bear. It is brown. It is big.',
+            hint: 'Match the object (teddy bear), color (brown), and size (big)!'
+          },
+          {
+            emoji: '🖍️',
+            label: 'School Thing',
+            prompt: 'What is this school thing?',
+            options: ['a crayon', 'a rubber', 'a board'],
+            answer: 'a crayon',
+            hint: 'We use a crayon to color pictures!'
+          },
+          {
+            emoji: '🐤',
+            label: 'Baby Chicken',
+            prompt: 'Look! The baby chicken is yellow and small. It is a _____.',
+            options: ['chick', 'lion', 'tiger'],
+            answer: 'chick',
+            hint: 'A baby chicken is called a chick!'
+          }
+        ]
+      },
+      {
+        id: 3,
+        badge: 'Stage 4',
+        emoji: '🏴‍☠️👸',
+        title: 'Character & Mystery Guessing',
+        topic: 'Who is she/he? • Is it / she / he...?',
+        twoCols: false,
+        questions: [
+          {
+            emoji: '🏴‍☠️',
+            label: 'Mystery Character',
+            prompt: 'Who is he?',
+            options: ['He\'s a pirate.', 'She\'s a princess.', 'It\'s a rabbit.'],
+            answer: 'He\'s a pirate.',
+            hint: 'He is a boy/man character with a pirate hat → He\'s a pirate!'
+          },
+          {
+            emoji: '👸',
+            label: 'Is she a clown?',
+            prompt: 'Look at the picture. Is she a clown?',
+            options: ['No, she isn\'t. She\'s a princess.', 'Yes, she is.', 'No, he isn\'t.'],
+            answer: 'No, she isn\'t. She\'s a princess.',
+            hint: 'She is a princess, not a clown → No, she isn\'t!'
+          },
+          {
+            emoji: '🤡😄',
+            label: 'Happy or Sad?',
+            prompt: 'Look at the clown! Is he happy?',
+            options: ['Yes, he is.', 'No, he isn\'t.', 'Yes, it is.'],
+            answer: 'Yes, he is.',
+            hint: 'The clown has a big smile → Yes, he is!'
+          },
+          {
+            emoji: '👵',
+            label: 'Family Member',
+            prompt: 'Who is she? — She is my _____.',
+            options: ['grandma', 'grandpa', 'dad'],
+            answer: 'grandma',
+            hint: 'Grandmother = grandma!'
+          },
+          {
+            emoji: '🚂',
+            label: 'Is it a motorbike?',
+            prompt: 'Look! Is it a motorbike?',
+            options: ['No, it isn\'t. It\'s a train.', 'Yes, it is.', 'Yes, she is.'],
+            answer: 'No, it isn\'t. It\'s a train.',
+            hint: 'For objects/vehicles, answer with "it": No, it isn\'t. It\'s a train.'
+          },
+          {
+            emoji: '🐸❓',
+            label: 'Guessing Game: Am I...?',
+            prompt: 'You have a green frog card on your forehead. How do you ask?',
+            options: ['Am I a frog?', 'Who is she?', 'How old are you?'],
+            answer: 'Am I a frog?',
+            hint: 'To guess your own character card, ask: "Am I a frog?"'
+          }
+        ]
+      },
+      {
+        id: 4,
+        badge: 'Boss Stage',
+        emoji: '👑⚡',
+        title: 'Kingdom Boss Quiz Show',
+        topic: 'Greetings, Numbers & Master Review',
+        twoCols: false,
+        questions: [
+          {
+            emoji: '👋😊',
+            label: 'Greeting',
+            prompt: 'Teacher: "How are you today?" — You: "_____"',
+            options: [
+              'I\'m very well, thank you!',
+              'My name is Tom.',
+              'It\'s a blue marker.'
+            ],
+            answer: 'I\'m very well, thank you!',
+            hint: 'Answer "How are you?" with: I\'m fine / good / great / very well!'
+          },
+          {
+            emoji: '🎂8️⃣',
+            label: 'Age Question',
+            prompt: 'Friend: "How old are you?" — You: "_____"',
+            options: ['I\'m eight.', 'I\'m fine.', 'Yes, it is.'],
+            answer: 'I\'m eight.',
+            hint: '"How old are you?" asks about your age → I\'m eight!'
+          },
+          {
+            emoji: '🎈🎈🎈🎈🎈🎈🎈',
+            label: 'Count the Balloons!',
+            prompt: 'How many balloons are there?',
+            options: ['seven', 'six', 'nine'],
+            answer: 'seven',
+            hint: 'Count carefully: 1, 2, 3, 4, 5, 6, 7 → seven balloons!'
+          },
+          {
+            emoji: '🏍️',
+            label: 'Vehicle Vocabulary',
+            prompt: 'What is it? — It\'s a _____.',
+            options: ['motorbike', 'boat', 'desk'],
+            answer: 'motorbike',
+            hint: 'A two-wheeled motor vehicle is a motorbike!'
+          },
+          {
+            emoji: '😢',
+            label: 'Feelings',
+            prompt: 'Look at the boy. He is crying. He is _____.',
+            options: ['sad', 'happy', 'new'],
+            answer: 'sad',
+            hint: 'The opposite of happy is sad!'
+          },
+          {
+            emoji: '🦁',
+            label: 'King of the Jungle',
+            prompt: 'What is it? — Is it a tiger?',
+            options: ['No, it isn\'t. It\'s a lion.', 'Yes, it is.', 'She\'s a mum.'],
+            answer: 'No, it isn\'t. It\'s a lion.',
+            hint: 'That\'s a lion! → No, it isn\'t. It\'s a lion.'
+          }
+        ]
+      }
+    ];
+
+    /* ========================================================================
+       5. GAME STATE & CONTROLLER
+       ======================================================================== */
+    const state = {
+      mode: 'single', // 'single' | 'teams'
+      soloStars: 0,
+      teamAScore: 0,
+      teamBScore: 0,
+      currentTeam: 'A', // 'A' or 'B'
+      stageStars: [0, 0, 0, 0, 0], // Stars earned per stage (0..3)
+      activeStageIdx: 0,
+      qIndex: 0,
+      stageCorrectCount: 0,
+      answeredCurrent: false
+    };
+
+    function showScreen(screenId) {
+      document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+      document.getElementById(screenId).classList.add('active');
+      const mapNav = document.getElementById('btn-map-nav');
+      mapNav.style.display = (screenId === 'screen-play') ? 'inline-flex' : 'none';
+    }
+
+    function updateHUD() {
+      const hud = document.getElementById('hud-stats');
+      if (state.mode === 'single') {
+        const totalStars = state.stageStars.reduce((a, b) => a + b, 0);
+        hud.innerHTML = `
+          <div class="stat-pill">⭐ Stars: <span>${totalStars} / 15</span></div>
+          <div class="stat-pill">💎 Points: <span>${state.soloStars * 10}</span></div>
+        `;
+      } else {
+        const activeA = state.currentTeam === 'A' ? 'active-turn' : '';
+        const activeB = state.currentTeam === 'B' ? 'active-turn' : '';
+        hud.innerHTML = `
+          <div class="stat-pill team-a ${activeA}">🔴 Red Team: <span>${state.teamAScore}</span></div>
+          <div class="stat-pill team-b ${activeB}">🔵 Blue Team: <span>${state.teamBScore}</span></div>
+        `;
+      }
+    }
+
+    function startGame(mode) {
+      SoundFX.click();
+      state.mode = mode;
+      state.soloStars = 0;
+      state.teamAScore = 0;
+      state.teamBScore = 0;
+      state.currentTeam = 'A';
+      state.stageStars = [0, 0, 0, 0, 0];
+      updateHUD();
+      goToMap();
+    }
+
+    function resetToStart() {
+      SoundFX.click();
+      document.getElementById('hud-stats').innerHTML = '';
+      showScreen('screen-start');
+    }
+
+    function goToMap() {
+      SoundFX.click();
+      renderMap();
+      updateHUD();
+      showScreen('screen-map');
+    }
+
+    function renderMap() {
+      const grid = document.getElementById('stages-grid');
+      grid.innerHTML = STAGES_DATA.map((stage, idx) => {
+        const stars = state.stageStars[idx];
+        const isDone = stars > 0;
+        const isBoss = idx === STAGES_DATA.length - 1;
+        const starStr = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
+
+        return `
+          <div class="stage-node ${isDone ? 'completed' : ''} ${isBoss ? 'boss-node' : ''}" onclick="launchStage(${idx})">
+            <div class="stage-top">
+              <span class="stage-badge">${stage.badge}</span>
+              <span class="stage-stars">${starStr}</span>
+            </div>
+            <div class="stage-emoji">${stage.emoji}</div>
+            <div>
+              <div class="stage-name">${stage.title}</div>
+              <div class="stage-topic">${stage.topic}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function launchStage(idx) {
+      SoundFX.click();
+      state.activeStageIdx = idx;
+      state.qIndex = 0;
+      state.stageCorrectCount = 0;
+      showScreen('screen-play');
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const stage = STAGES_DATA[state.activeStageIdx];
+      const q = stage.questions[state.qIndex];
+      state.answeredCurrent = false;
+
+      // Top bar & progress
+      document.getElementById('play-stage-title').textContent = `${stage.badge}: ${stage.title}`;
+      document.getElementById('play-q-counter').textContent = `${state.qIndex + 1} / ${stage.questions.length}`;
+      const pct = ((state.qIndex) / stage.questions.length) * 100;
+      document.getElementById('play-progress-fill').style.width = `${pct}%`;
+
+      // Team Turn Banner (in 2-Team Mode)
+      const turnWrap = document.getElementById('turn-indicator-wrap');
+      if (state.mode === 'teams') {
+        const cls = state.currentTeam === 'A' ? 'team-a' : 'team-b';
+        const label = state.currentTeam === 'A' ? '🔴 RED TEAM\'S TURN!' : '🔵 BLUE TEAM\'S TURN!';
+        turnWrap.innerHTML = `<div class="turn-banner ${cls}">${label}</div>`;
+      } else {
+        turnWrap.innerHTML = '';
+      }
+      updateHUD();
+
+      // Visual Showcase
+      const showcase = document.getElementById('visual-showcase');
+      if (q.svgScene) {
+        showcase.innerHTML = `
+          ${renderPrepositionSVG(q.svgScene)}
+          <div class="showcase-label">${q.label}</div>
+        `;
+      } else {
+        showcase.innerHTML = `
+          <div class="showcase-emoji" style="${q.customStyle || ''}">${q.emoji}</div>
+          <div class="showcase-label">${q.label}</div>
+        `;
+      }
+
+      // Prompt
+      document.getElementById('question-text').textContent = q.prompt;
+
+      // Options
+      const optionsGrid = document.getElementById('options-grid');
+      optionsGrid.className = stage.twoCols ? 'options-grid two-cols' : 'options-grid';
+
+      // Shuffle options slightly for variety while keeping order clean
+      const opts = [...q.options];
+      optionsGrid.innerHTML = opts.map((optText, i) => `
+        <button class="option-btn" data-opt="${encodeURIComponent(optText)}" onclick="handleAnswer(this)">
+          ${optText}
+        </button>
+      `).join('');
+
+      // Hide feedback
+      const fb = document.getElementById('feedback-box');
+      fb.className = 'feedback-box';
+    }
+
+    function handleAnswer(btnEl) {
+      if (state.answeredCurrent) return;
+      state.answeredCurrent = true;
+
+      const stage = STAGES_DATA[state.activeStageIdx];
+      const q = stage.questions[state.qIndex];
+      const chosen = decodeURIComponent(btnEl.getAttribute('data-opt'));
+      const isCorrect = chosen === q.answer;
+
+      // Disable all buttons and highlight correct answer
+      const allBtns = document.querySelectorAll('.option-btn');
+      allBtns.forEach(b => {
+        b.disabled = true;
+        const val = decodeURIComponent(b.getAttribute('data-opt'));
+        if (val === q.answer) {
+          b.classList.add('correct');
+        }
+      });
+
+      const fb = document.getElementById('feedback-box');
+      const fbMsg = document.getElementById('feedback-msg');
+      const nextBtn = document.getElementById('btn-next-q');
+
+      if (isCorrect) {
+        SoundFX.correct();
+        Confetti.launch(35);
+        state.stageCorrectCount++;
+        if (state.mode === 'single') {
+          state.soloStars++;
+        } else {
+          if (state.currentTeam === 'A') state.teamAScore += 10;
+          else state.teamBScore += 10;
+        }
+        fb.className = 'feedback-box show is-correct';
+        fbMsg.innerHTML = `🎉 Awesome! <strong>"${q.answer}"</strong> is correct!`;
+      } else {
+        btnEl.classList.add('wrong');
+        SoundFX.wrong();
+        fb.className = 'feedback-box show is-wrong';
+        fbMsg.innerHTML = `💡 Good try! ${q.hint}`;
+      }
+
+      // Switch turn in 2-team mode
+      if (state.mode === 'teams') {
+        state.currentTeam = state.currentTeam === 'A' ? 'B' : 'A';
+      }
+      updateHUD();
+
+      // Update Next button text on last question
+      const isLast = state.qIndex === stage.questions.length - 1;
+      nextBtn.textContent = isLast ? 'Complete Stage! 🌟' : 'Next Question ➔';
+    }
+
+    function nextQuestion() {
+      SoundFX.click();
+      const stage = STAGES_DATA[state.activeStageIdx];
+      if (state.qIndex < stage.questions.length - 1) {
+        state.qIndex++;
+        renderQuestion();
+      } else {
+        // Stage Completed! Calculate stars (1 to 3)
+        document.getElementById('play-progress-fill').style.width = '100%';
+        const ratio = state.stageCorrectCount / stage.questions.length;
+        let earnedStars = 1;
+        if (ratio >= 0.8) earnedStars = 3;
+        else if (ratio >= 0.5) earnedStars = 2;
+
+        state.stageStars[state.activeStageIdx] = Math.max(
+          state.stageStars[state.activeStageIdx],
+          earnedStars
+        );
+
+        SoundFX.fanfare();
+        Confetti.launch(80);
+
+        // If Boss stage completed, go straight to Victory Certificate
+        if (state.activeStageIdx === STAGES_DATA.length - 1) {
+          showCertificate();
+        } else {
+          goToMap();
+        }
+      }
+    }
+
+    function showCertificate() {
+      SoundFX.fanfare();
+      Confetti.launch(110);
+      const totalStars = state.stageStars.reduce((a, b) => a + b, 0);
+      const winnerArea = document.getElementById('cert-winner-area');
+      const cardsArea = document.getElementById('cert-score-cards');
+
+      if (state.mode === 'single') {
+        winnerArea.innerHTML = `<div class="cert-winner-banner">🌟 Official Toy Kingdom Hero 🌟</div>`;
+        cardsArea.innerHTML = `
+          <div class="cert-box">
+            <div class="cert-box-label">Stars Collected</div>
+            <div class="cert-box-val">⭐ ${totalStars} / 15</div>
+          </div>
+          <div class="cert-box">
+            <div class="cert-box-label">Total Score</div>
+            <div class="cert-box-val">💎 ${state.soloStars * 10} pts</div>
+          </div>
+        `;
+      } else {
+        let winnerText = "🤝 It's a Super Tie!";
+        if (state.teamAScore > state.teamBScore) winnerText = '🔴 RED TEAM WINS THE CROWN!';
+        else if (state.teamBScore > state.teamAScore) winnerText = '🔵 BLUE TEAM WINS THE CROWN!';
+
+        winnerArea.innerHTML = `<div class="cert-winner-banner">${winnerText}</div>`;
+        cardsArea.innerHTML = `
+          <div class="cert-box" style="border-color: #fda4af;">
+            <div class="cert-box-label">🔴 Red Team</div>
+            <div class="cert-box-val" style="color: #be123c;">${state.teamAScore} pts</div>
+          </div>
+          <div class="cert-box" style="border-color: #7dd3fc;">
+            <div class="cert-box-label">🔵 Blue Team</div>
+            <div class="cert-box-val" style="color: #0369a1;">${state.teamBScore} pts</div>
+          </div>
+          <div class="cert-box">
+            <div class="cert-box-label">Kingdom Stars</div>
+            <div class="cert-box-val">⭐ ${totalStars} / 15</div>
+          </div>
+        `;
+      }
+
+      showScreen('screen-victory');
+    }
+  </script>
+</body>
+</html>

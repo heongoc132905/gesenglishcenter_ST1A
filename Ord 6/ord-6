@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Starters English: Unit 1 - 7 Review & New Lesson</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Font: Roboto with full Vietnamese diacritics support -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --font-display: 'Roboto', sans-serif;
+      --font-body: 'Roboto', sans-serif;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #e0f2fe 0%, #fef9c3 50%, #fce7f3 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, button, input, .font-display {
+      font-family: 'Roboto', sans-serif;
+    }
+
+    /* 3D Flip Card Styling */
+    .perspective-1000 {
+      perspective: 1200px;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transform-style: preserve-3d;
+    }
+
+    .flip-card-inner.is-flipped {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-face {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      border-radius: 1.75rem;
+    }
+
+    .flip-card-back {
+      transform: rotateY(180deg);
+    }
+
+    /* Tactile 3D Button Press Effect */
+    .btn-3d {
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+    .btn-3d:active {
+      transform: translateY(3px);
+    }
+
+    /* Floating Animation for Emojis */
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-6px) rotate(2deg); }
+    }
+    .animate-float {
+      animation: floatSlow 3s ease-in-out infinite;
+    }
+
+    /* Shake animation on wrong answer */
+    @keyframes gentleShake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
+    .animate-shake {
+      animation: gentleShake 0.35s ease-in-out;
+    }
+
+    /* Pop-in animation */
+    @keyframes popIn {
+      0% { transform: scale(0.92); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .animate-pop {
+      animation: popIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    /* Custom Scrollbar for horizontal pills on mobile */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="text-slate-800 select-none pb-12">
+
+  <!-- Confetti Canvas Overlay -->
+  <canvas id="confetti-canvas" class="fixed inset-0 pointer-events-none z-50 w-full h-full"></canvas>
+
+  <!-- Top Header Banner -->
+  <header class="max-w-4xl mx-auto pt-4 px-4 sm:pt-6">
+    <div class="bg-white/90 backdrop-blur-md rounded-3xl p-4 sm:p-5 shadow-lg border-4 border-sky-300 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3 text-center sm:text-left">
+        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-300 to-orange-400 flex items-center justify-center text-3xl shadow-md border-2 border-white shrink-0">
+          🚀
+        </div>
+        <div>
+          <span class="inline-block bg-sky-100 text-sky-700 text-xs font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider mb-1">
+            Starters • Unit 1 – 7 Review & New Lesson
+          </span>
+          <h1 class="text-xl sm:text-2xl font-bold text-slate-800 leading-tight">
+            Bé Vui Học Tiếng Anh
+          </h1>
+        </div>
+      </div>
+
+      <!-- Global Controls: Speed Toggle & Learned Counter -->
+      <div class="flex items-center gap-2.5 flex-wrap justify-center">
+        <button id="speed-toggle-btn" onclick="toggleSpeechSpeed()"
+          class="btn-3d bg-violet-100 hover:bg-violet-200 text-violet-800 border-2 border-violet-300 font-bold text-xs sm:text-sm px-3.5 py-2 rounded-2xl flex items-center gap-1.5 shadow-sm"
+          title="Chỉnh tốc độ đọc">
+          <span id="speed-icon">🐢</span>
+          <span id="speed-label">Đọc chậm: BẬT</span>
+        </button>
+
+        <div class="bg-amber-100 border-2 border-amber-300 text-amber-900 font-extrabold text-xs sm:text-sm px-3.5 py-2 rounded-2xl flex items-center gap-1.5 shadow-sm">
+          <span>⭐ Đã thuộc:</span>
+          <span id="learned-badge" class="text-base text-orange-600">0 / 24</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <nav class="grid grid-cols-3 gap-2 sm:gap-3 mt-4">
+      <button onclick="switchTab('flashcards')" id="tab-flashcards"
+        class="btn-3d py-3 px-2 sm:px-4 rounded-2xl font-display font-bold text-sm sm:text-lg flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 border-b-4 transition-all bg-sky-500 text-white border-sky-700 shadow-md">
+        <span class="text-xl">🗂️</span>
+        <span>Thẻ Từ Vựng</span>
+      </button>
+
+      <button onclick="switchTab('quiz')" id="tab-quiz"
+        class="btn-3d py-3 px-2 sm:px-4 rounded-2xl font-display font-bold text-sm sm:text-lg flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 border-b-4 transition-all bg-white text-slate-600 border-slate-300 hover:bg-amber-50">
+        <span class="text-xl">🎮</span>
+        <span>Nghe & Đọc</span>
+      </button>
+
+      <button onclick="switchTab('grammar')" id="tab-grammar"
+        class="btn-3d py-3 px-2 sm:px-4 rounded-2xl font-display font-bold text-sm sm:text-lg flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 border-b-4 transition-all bg-white text-slate-600 border-slate-300 hover:bg-emerald-50">
+        <span class="text-xl">📖</span>
+        <span>Ngữ Pháp</span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="max-w-4xl mx-auto px-4 mt-5">
+
+    <!-- =========================================================
+         MODE 1: FLASHCARDS (THẺ TỪ VỰNG)
+    ========================================================= -->
+    <section id="section-flashcards" class="animate-pop">
+      <!-- Category Filter Pills -->
+      <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-2 mb-3 justify-start sm:justify-center">
+        <button onclick="filterCategory('all')" data-cat="all"
+          class="cat-pill shrink-0 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-extrabold border-2 transition-all bg-slate-800 text-white border-slate-800">
+          🌈 Tất cả (24)
+        </button>
+        <button onclick="filterCategory('Family')" data-cat="Family"
+          class="cat-pill shrink-0 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-extrabold border-2 transition-all bg-white text-pink-700 border-pink-300 hover:bg-pink-50">
+          👨‍👩‍👧‍👦 Gia đình (7)
+        </button>
+        <button onclick="filterCategory('Toys & Vehicles')" data-cat="Toys & Vehicles"
+          class="cat-pill shrink-0 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-extrabold border-2 transition-all bg-white text-sky-700 border-sky-300 hover:bg-sky-50">
+          🚀 Xe & Đồ chơi (5)
+        </button>
+        <button onclick="filterCategory('Animals & Adjectives')" data-cat="Animals & Adjectives"
+          class="cat-pill shrink-0 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-extrabold border-2 transition-all bg-white text-amber-700 border-amber-300 hover:bg-amber-50">
+          🐶 Con vật & Tính từ (5)
+        </button>
+        <button onclick="filterCategory('School & Bedroom')" data-cat="School & Bedroom"
+          class="cat-pill shrink-0 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-extrabold border-2 transition-all bg-white text-emerald-700 border-emerald-300 hover:bg-emerald-50">
+          🛏️ Đồ dùng & Phòng ngủ (7)
+        </button>
+      </div>
+
+      <!-- Progress Bar & Card Counter -->
+      <div class="max-w-lg mx-auto mb-3 flex items-center justify-between gap-3 px-1">
+        <span id="fc-counter" class="font-display font-bold text-slate-700 text-base sm:text-lg">
+          Thẻ 1 / 24
+        </span>
+        <div class="flex-1 h-3 bg-white/80 rounded-full overflow-hidden border border-slate-200 shadow-inner">
+          <div id="fc-progress-bar" class="h-full bg-gradient-to-r from-sky-400 to-emerald-400 transition-all duration-300" style="width: 4.16%;"></div>
+        </div>
+        <button onclick="shuffleFlashcards()"
+          class="btn-3d bg-white hover:bg-slate-100 text-slate-700 border-2 border-slate-300 text-xs font-extrabold px-3 py-1 rounded-xl shadow-sm">
+          🔀 Trộn thẻ
+        </button>
+      </div>
+
+      <!-- 3D Flip Card Container -->
+      <div class="max-w-lg mx-auto perspective-1000 h-[360px] sm:h-[390px] cursor-pointer" onclick="flipCard()">
+        <div id="flashcard-inner" class="flip-card-inner">
+
+          <!-- FRONT OF CARD -->
+          <div class="flip-card-face bg-white border-4 border-sky-400 shadow-xl p-6 flex flex-col items-center justify-between">
+            <div class="w-full flex items-center justify-between">
+              <span id="fc-category-badge" class="bg-pink-100 text-pink-700 text-xs font-extrabold px-3 py-1 rounded-full border border-pink-200">
+                Family
+              </span>
+              <span id="fc-lesson-tag" class="bg-amber-100 text-amber-800 text-xs font-extrabold px-2.5 py-1 rounded-full">
+                Review
+              </span>
+            </div>
+
+            <div class="flex flex-col items-center text-center my-auto">
+              <div id="fc-emoji" class="text-7xl sm:text-8xl mb-3 animate-float drop-shadow-sm">
+                👨‍👩‍👧‍👦
+              </div>
+              <h2 id="fc-word" class="font-display text-4xl sm:text-5xl font-bold text-slate-800 tracking-wide">
+                family
+              </h2>
+              <p id="fc-phonetic" class="text-slate-400 font-bold text-sm sm:text-base mt-1">
+                /ˈfæm.əl.i/
+              </p>
+            </div>
+
+            <div class="w-full flex flex-col items-center gap-2">
+              <button onclick="speakCurrentWord(event)"
+                class="btn-3d w-full sm:w-auto bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white font-display font-bold text-lg px-7 py-3 rounded-2xl shadow-md border-b-4 border-blue-800 flex items-center justify-center gap-2">
+                <span class="text-2xl">🔊</span>
+                <span>Nghe Từ Vựng</span>
+              </button>
+              <span class="text-xs font-bold text-slate-400">👆 Chạm vào thẻ để lật xem nghĩa & ví dụ</span>
+            </div>
+          </div>
+
+          <!-- BACK OF CARD -->
+          <div class="flip-card-face flip-card-back bg-gradient-to-b from-amber-50 to-yellow-100 border-4 border-amber-400 shadow-xl p-6 flex flex-col items-center justify-between">
+            <div class="w-full flex items-center justify-between">
+              <span class="text-xs font-extrabold text-amber-700 uppercase tracking-wider">
+                Nghĩa tiếng Việt & Mẫu câu
+              </span>
+              <span id="fc-back-emoji" class="text-2xl">👨‍👩‍👧‍👦</span>
+            </div>
+
+            <div class="text-center my-auto w-full">
+              <div class="text-sm font-bold text-slate-500 uppercase" id="fc-back-word">family</div>
+              <h3 id="fc-meaning" class="font-display text-3xl sm:text-4xl font-bold text-amber-900 mt-1 mb-4">
+                gia đình
+              </h3>
+
+              <div class="bg-white/90 rounded-2xl p-4 border-2 border-amber-300 shadow-sm text-left">
+                <div class="text-xs font-extrabold text-sky-600 uppercase mb-1">💬 Câu ví dụ trong bài:</div>
+                <p id="fc-example-en" class="font-display text-lg sm:text-xl font-bold text-slate-800">
+                  This is my family.
+                </p>
+                <p id="fc-example-vi" class="text-sm font-semibold text-slate-500 mt-1">
+                  (Đây là gia đình của tôi.)
+                </p>
+              </div>
+            </div>
+
+            <div class="w-full flex flex-col sm:flex-row items-center justify-center gap-2">
+              <button onclick="speakCurrentExample(event)"
+                class="btn-3d w-full sm:w-auto bg-amber-500 hover:bg-amber-600 text-white font-display font-bold text-base px-5 py-2.5 rounded-2xl shadow-md border-b-4 border-amber-700 flex items-center justify-center gap-2">
+                <span>🔊</span>
+                <span>Nghe Câu Ví Dụ</span>
+              </button>
+              <span class="text-xs font-bold text-amber-700/70">👆 Chạm để lật lại</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Bottom Navigation & Mark Learned -->
+      <div class="max-w-lg mx-auto mt-5 flex items-center justify-between gap-2 sm:gap-3">
+        <button onclick="prevCard()"
+          class="btn-3d flex-1 bg-white hover:bg-slate-50 text-slate-700 font-display font-bold text-base sm:text-lg py-3.5 px-4 rounded-2xl border-2 border-slate-300 border-b-4 shadow-sm flex items-center justify-center gap-1">
+          <span>⬅</span>
+          <span>Trước</span>
+        </button>
+
+        <button id="mark-learned-btn" onclick="toggleLearned()"
+          class="btn-3d flex-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-display font-bold text-sm sm:text-base py-3.5 px-3 rounded-2xl border-2 border-emerald-400 border-b-4 shadow-sm flex items-center justify-center gap-1.5">
+          <span id="learned-star-icon">☆</span>
+          <span id="learned-btn-text">Đánh dấu thuộc</span>
+        </button>
+
+        <button onclick="nextCard()"
+          class="btn-3d flex-1 bg-emerald-500 hover:bg-emerald-600 text-white font-display font-bold text-base sm:text-lg py-3.5 px-4 rounded-2xl border-b-4 border-emerald-700 shadow-md flex items-center justify-center gap-1">
+          <span>Tiếp</span>
+          <span>➡</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         MODE 2: LISTENING & READING QUIZ (TRÒ CHƠI NGHE & ĐỌC)
+    ========================================================= -->
+    <section id="section-quiz" class="hidden animate-pop">
+      <div class="max-w-2xl mx-auto bg-white/95 rounded-3xl p-5 sm:p-7 shadow-xl border-4 border-amber-300">
+
+        <!-- Quiz Sub-mode Selector & Score -->
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pb-4 border-b-2 border-slate-100">
+          <div class="flex bg-slate-100 p-1 rounded-2xl w-full sm:w-auto">
+            <button onclick="setQuizType('listening')" id="qtype-listening"
+              class="flex-1 sm:flex-initial px-4 py-2 rounded-xl font-display font-bold text-sm bg-amber-400 text-amber-950 shadow-sm transition-all">
+              🎧 Nghe Chọn Hình
+            </button>
+            <button onclick="setQuizType('grammar')" id="qtype-grammar"
+              class="flex-1 sm:flex-initial px-4 py-2 rounded-xl font-display font-bold text-sm text-slate-600 hover:text-slate-900 transition-all">
+              🧩 Ghép Câu Ngữ Pháp
+            </button>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <span id="quiz-q-counter" class="text-sm font-extrabold text-slate-500">Câu 1 / 10</span>
+            <div class="bg-yellow-100 border-2 border-yellow-400 px-3 py-1 rounded-xl font-display font-bold text-amber-800">
+              🌟 <span id="quiz-score">0</span> điểm
+            </div>
+          </div>
+        </div>
+
+        <!-- Quiz Active Question Area -->
+        <div id="quiz-active-area" class="mt-5">
+          <!-- Prompt Box -->
+          <div id="quiz-prompt-box" class="bg-sky-50 border-2 border-sky-200 rounded-2xl p-5 text-center mb-5">
+            <!-- Dynamically injected -->
+          </div>
+
+          <!-- 4 Options Grid -->
+          <div id="quiz-options-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <!-- Dynamically injected -->
+          </div>
+
+          <!-- Feedback Message Banner -->
+          <div id="quiz-feedback" class="hidden mt-4 p-3.5 rounded-2xl text-center font-display font-bold text-lg"></div>
+        </div>
+
+        <!-- Quiz Result Screen -->
+        <div id="quiz-result-area" class="hidden text-center py-6">
+          <div class="text-7xl mb-3 animate-bounce">🏆</div>
+          <h2 class="font-display text-3xl font-bold text-slate-800 mb-2">Hoàn Thành Xuất Sắc!</h2>
+          <p class="text-slate-600 font-bold text-lg mb-4">
+            Bé đạt được <span id="final-score-text" class="text-amber-600 text-2xl font-extrabold">10 / 10</span> điểm!
+          </p>
+          <div id="result-stars" class="text-4xl mb-6">⭐⭐⭐⭐⭐</div>
+          <button onclick="restartQuiz()"
+            class="btn-3d bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-display font-bold text-xl px-8 py-3.5 rounded-2xl border-b-4 border-emerald-800 shadow-lg">
+            🔄 Chơi Lại Lượt Mới
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================================================
+         MODE 3: GRAMMAR SUMMARY (MẪU CÂU ÔN TẬP)
+    ========================================================= -->
+    <section id="section-grammar" class="hidden animate-pop">
+      <div class="max-w-3xl mx-auto space-y-4">
+
+        <div class="bg-white/90 rounded-2xl p-4 border-2 border-emerald-300 text-center shadow-sm">
+          <h2 class="font-display text-xl sm:text-2xl font-bold text-emerald-800">
+            🗣️ Bảng Mẫu Câu Giao Tiếp (Unit 1 – 7 & Bài Mới)
+          </h2>
+          <p class="text-sm text-slate-600 font-semibold mt-1">
+            Bấm vào nút <span class="text-sky-600 font-extrabold">🔊 Nghe</span> ở từng câu để luyện phát âm và nhắc lại theo máy nhé!
+          </p>
+        </div>
+
+        <div id="grammar-cards-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Dynamically rendered grammar cards -->
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // =========================================================================
+    // 1. COMPLETE DATASET: 24 VOCABULARY ITEMS & GRAMMAR STRUCTURES
+    // =========================================================================
+    const VOCAB_DATA = [
+      { id: 1, word: "family", phonetic: "/ˈfæm.əl.i/", meaning: "gia đình", emoji: "👨‍👩‍👧‍👦", category: "Family", lesson: "Review", exampleEn: "This is my family.", exampleVi: "Đây là gia đình của tôi." },
+      { id: 2, word: "mother", phonetic: "/ˈmʌð.ər/", meaning: "mẹ", emoji: "👩", category: "Family", lesson: "Review", exampleEn: "Who's this? This is my mother.", exampleVi: "Đây là ai? Đây là mẹ của tôi." },
+      { id: 3, word: "father", phonetic: "/ˈfɑː.ðər/", meaning: "bố / cha", emoji: "👨", category: "Family", lesson: "Review", exampleEn: "He is my father.", exampleVi: "Ông ấy là bố của tôi." },
+      { id: 4, word: "brother", phonetic: "/ˈbrʌð.ər/", meaning: "anh trai / em trai", emoji: "👦", category: "Family", lesson: "Review", exampleEn: "This is my little brother.", exampleVi: "Đây là em trai nhỏ của tôi." },
+      { id: 5, word: "sister", phonetic: "/ˈsɪs.tər/", meaning: "chị gái / em gái", emoji: "👧", category: "Family", lesson: "Review", exampleEn: "She is my sister.", exampleVi: "Cô ấy là chị/em gái của tôi." },
+      { id: 6, word: "grandmother", phonetic: "/ˈɡræn.mʌð.ər/", meaning: "bà nội / bà ngoại", emoji: "👵", category: "Family", lesson: "New Lesson ✨", exampleEn: "She is my grandmother.", exampleVi: "Bà ấy là bà của tôi." },
+      { id: 7, word: "grandfather", phonetic: "/ˈɡræn.fɑː.ðər/", meaning: "ông nội / ông ngoại", emoji: "👴", category: "Family", lesson: "New Lesson ✨", exampleEn: "This is my grandfather.", exampleVi: "Đây là ông của tôi." },
+
+      { id: 8, word: "space rocket", phonetic: "/speɪs ˈrɒk.ɪt/", meaning: "tên lửa vũ trụ", emoji: "🚀", category: "Toys & Vehicles", lesson: "Review", exampleEn: "I have got a space rocket.", exampleVi: "Tôi có một chiếc tên lửa vũ trụ." },
+      { id: 9, word: "plane", phonetic: "/pleɪn/", meaning: "máy bay", emoji: "✈️", category: "Toys & Vehicles", lesson: "Review", exampleEn: "Is this a plane? Yes, it is.", exampleVi: "Đây có phải là máy bay không? Đúng vậy." },
+      { id: 10, word: "boat", phonetic: "/bəʊt/", meaning: "con thuyền", emoji: "⛵", category: "Toys & Vehicles", lesson: "Review", exampleEn: "I haven't got a boat.", exampleVi: "Tôi không có một chiếc thuyền nào." },
+      { id: 11, word: "car", phonetic: "/kɑːr/", meaning: "xe ô tô", emoji: "🚗", category: "Toys & Vehicles", lesson: "Review", exampleEn: "What have you got? I have got a car.", exampleVi: "Bạn có gì? Tôi có một chiếc ô tô." },
+      { id: 12, word: "bike", phonetic: "/baɪk/", meaning: "xe đạp", emoji: "🚲", category: "Toys & Vehicles", lesson: "Review", exampleEn: "Have you got a bike? Yes, I have.", exampleVi: "Bạn có xe đạp không? Có, tôi có." },
+
+      { id: 13, word: "little", phonetic: "/ˈlɪt.əl/", meaning: "nhỏ bé", emoji: "🐣", category: "Animals & Adjectives", lesson: "Review", exampleEn: "It is a little cat.", exampleVi: "Nó là một chú mèo nhỏ." },
+      { id: 14, word: "pretty", phonetic: "/ˈprɪt.i/", meaning: "xinh xắn, dễ thương", emoji: "🎀", category: "Animals & Adjectives", lesson: "Review", exampleEn: "She is pretty.", exampleVi: "Cô ấy thật xinh xắn." },
+      { id: 15, word: "dog", phonetic: "/dɒɡ/", meaning: "con chó", emoji: "🐶", category: "Animals & Adjectives", lesson: "Review", exampleEn: "Is this a dog? No, it isn't.", exampleVi: "Đây có phải là con chó không? Không phải." },
+      { id: 16, word: "cat", phonetic: "/kæt/", meaning: "con mèo", emoji: "🐱", category: "Animals & Adjectives", lesson: "Review", exampleEn: "I have got a little cat.", exampleVi: "Tôi có một chú mèo nhỏ." },
+      { id: 17, word: "bird", phonetic: "/bɜːd/", meaning: "con chim", emoji: "🐦", category: "Animals & Adjectives", lesson: "Review", exampleEn: "Have you got a bird? No, I haven't.", exampleVi: "Bạn có nuôi chim không? Không, tôi không có." },
+
+      { id: 18, word: "computer", phonetic: "/kəmˈpjuː.tər/", meaning: "máy vi tính", emoji: "💻", category: "School & Bedroom", lesson: "Review", exampleEn: "This is my computer.", exampleVi: "Đây là máy vi tính của tôi." },
+      { id: 19, word: "pen", phonetic: "/pen/", meaning: "bút mực / bút bi", emoji: "🖊️", category: "School & Bedroom", lesson: "Review", exampleEn: "I have got a pen. How about you?", exampleVi: "Tôi có một cây bút mực. Còn bạn thì sao?" },
+      { id: 20, word: "pencil", phonetic: "/ˈpen.səl/", meaning: "bút chì", emoji: "✏️", category: "School & Bedroom", lesson: "Review", exampleEn: "Is this a pencil? Yes, it is.", exampleVi: "Đây có phải là bút chì không? Đúng vậy." },
+      { id: 21, word: "lamp", phonetic: "/læmp/", meaning: "đèn bàn / đèn ngủ", emoji: "🛋️💡", category: "School & Bedroom", lesson: "New Lesson ✨", exampleEn: "Is this a lamp? Yes, it is.", exampleVi: "Đây có phải là cái đèn không? Đúng vậy." },
+      { id: 22, word: "shelf", phonetic: "/ʃelf/", meaning: "cái kệ / giá sách", emoji: "🗄️", category: "School & Bedroom", lesson: "New Lesson ✨", exampleEn: "I haven't got a shelf.", exampleVi: "Tôi không có cái kệ nào." },
+      { id: 23, word: "photo", phonetic: "/ˈfəʊ.təʊ/", meaning: "bức ảnh", emoji: "🖼️", category: "School & Bedroom", lesson: "New Lesson ✨", exampleEn: "This is a photo of my family.", exampleVi: "Đây là bức ảnh gia đình của tôi." },
+      { id: 24, word: "bed", phonetic: "/bed/", meaning: "cái giường", emoji: "🛏️", category: "School & Bedroom", lesson: "New Lesson ✨", exampleEn: "Have you got a bed? Yes, I have.", exampleVi: "Bạn có giường ngủ không? Có, tôi có." }
+    ];
+
+    const GRAMMAR_PATTERNS = [
+      {
+        title: "1. Hỏi xác nhận đồ vật / con vật",
+        badge: "Review + New",
+        color: "border-sky-300 bg-sky-50/70",
+        formula: "Is this a/an ...? → Yes, it is. / No, it isn't.",
+        note: "Dùng để hỏi xem đồ vật/con vật ở gần có đúng là thứ mình đoán không.",
+        examples: [
+          { en: "Is this a plane? Yes, it is.", vi: "Đây có phải máy bay không? Đúng vậy." },
+          { en: "Is this a dog? No, it isn't.", vi: "Đây có phải con chó không? Không phải." },
+          { en: "Is this a lamp? Yes, it is.", vi: "Đây có phải cái đèn không? Đúng vậy." }
+        ]
+      },
+      {
+        title: "2. Hỏi & Giới thiệu người thân",
+        badge: "New Lesson ✨",
+        color: "border-pink-300 bg-pink-50/70",
+        formula: "Who's this? → This is my ... / He is ... / She is ...",
+        note: "Dùng 'He is' cho nam (father, grandfather, brother) và 'She is' cho nữ (mother, grandmother, sister).",
+        examples: [
+          { en: "Who's this? This is my mother.", vi: "Đây là ai? Đây là mẹ của tôi." },
+          { en: "He is my grandfather.", vi: "Ông ấy là ông của tôi." },
+          { en: "She is my sister. She is pretty.", vi: "Cô ấy là chị tôi. Cô ấy rất xinh." }
+        ]
+      },
+      {
+        title: "3. Nói về đồ vật mình có / không có",
+        badge: "Review",
+        color: "border-amber-300 bg-amber-50/70",
+        formula: "What have you got? → I have got a ... / I haven't got a ...",
+        note: "'I have got' = Tôi có; 'I haven't got' = Tôi không có.",
+        examples: [
+          { en: "What have you got? I have got a car.", vi: "Bạn có gì? Tôi có một chiếc ô tô." },
+          { en: "I have got a space rocket.", vi: "Tôi có một chiếc tên lửa vũ trụ." },
+          { en: "I haven't got a boat.", vi: "Tôi không có thuyền." }
+        ]
+      },
+      {
+        title: "4. Hỏi Yes/No về sở hữu & Hỏi lại",
+        badge: "New Lesson ✨",
+        color: "border-emerald-300 bg-emerald-50/70",
+        formula: "Have you got a ...? → Yes, I have. / No, I haven't. How about you?",
+        note: "'How about you?' nghĩa là 'Còn bạn thì sao?' dùng để hỏi lại bạn mình.",
+        examples: [
+          { en: "Have you got a bike? Yes, I have.", vi: "Bạn có xe đạp không? Có, tôi có." },
+          { en: "Have you got a bird? No, I haven't.", vi: "Bạn có chim không? Không, tôi không có." },
+          { en: "I have got a pen. How about you?", vi: "Tôi có một cây bút. Còn bạn thì sao?" }
+        ]
+      }
+    ];
+
+    const GRAMMAR_QUIZ_QUESTIONS = [
+      {
+        promptEn: "Who's this? — _____ is my grandmother.",
+        promptVi: "Giới thiệu bà của mình:",
+        audioText: "Who's this? She is my grandmother.",
+        options: ["She", "He", "It", "You"],
+        correct: "She"
+      },
+      {
+        promptEn: "Is this a lamp? — Yes, _____.",
+        promptVi: "Trả lời đồng ý với câu hỏi 'Is this...?'",
+        audioText: "Is this a lamp? Yes, it is.",
+        options: ["it is", "it isn't", "I have", "she is"],
+        correct: "it is"
+      },
+      {
+        promptEn: "Have you got a bike? — Yes, _____.",
+        promptVi: "Trả lời 'Có, tôi có' cho câu hỏi 'Have you got...?'",
+        audioText: "Have you got a bike? Yes, I have.",
+        options: ["I have", "I haven't", "it is", "he is"],
+        correct: "I have"
+      },
+      {
+        promptEn: "What have you got? — I _____ a space rocket.",
+        promptVi: "Nói 'Tôi có một chiếc tên lửa vũ trụ':",
+        audioText: "What have you got? I have got a space rocket.",
+        options: ["have got", "is", "am", "has"],
+        correct: "have got"
+      },
+      {
+        promptEn: "_____ this? — This is my grandfather.",
+        promptVi: "Đặt câu hỏi 'Đây là ai?'",
+        audioText: "Who's this? This is my grandfather.",
+        options: ["Who's", "What", "Where", "How"],
+        correct: "Who's"
+      },
+      {
+        promptEn: "Is this a dog? — No, _____.",
+        promptVi: "Trả lời phủ định 'Không phải':",
+        audioText: "Is this a dog? No, it isn't.",
+        options: ["it isn't", "it is", "I haven't", "she isn't"],
+        correct: "it isn't"
+      },
+      {
+        promptEn: "I have got a pen. _____ about you?",
+        promptVi: "Hỏi lại 'Còn bạn thì sao?'",
+        audioText: "I have got a pen. How about you?",
+        options: ["How", "Who", "What", "Is"],
+        correct: "How"
+      },
+      {
+        promptEn: "_____ is my father.",
+        promptVi: "Dùng đại từ đúng để giới thiệu bố:",
+        audioText: "He is my father.",
+        options: ["He", "She", "It", "We"],
+        correct: "He"
+      },
+      {
+        promptEn: "Have you got a shelf? — No, _____.",
+        promptVi: "Trả lời 'Không, tôi không có':",
+        audioText: "Have you got a shelf? No, I haven't.",
+        options: ["I haven't", "I have", "it isn't", "he isn't"],
+        correct: "I haven't"
+      },
+      {
+        promptEn: "This is a _____ of my family.",
+        promptVi: "Điền từ 'bức ảnh' vào chỗ trống:",
+        audioText: "This is a photo of my family.",
+        options: ["photo", "bed", "pencil", "boat"],
+        correct: "photo"
+      }
+    ];
+
+    // =========================================================================
+    // 2. APP STATE & SPEECH / AUDIO UTILITIES
+    // =========================================================================
+    let activeList = [...VOCAB_DATA];
+    let currentIndex = 0;
+    let isSlowSpeech = true; // Default slow & clear for young Starters learners
+    let learnedIds = new Set();
+
+    // Quiz State
+    let quizType = 'listening'; // 'listening' | 'grammar'
+    let quizQuestions = [];
+    let quizIndex = 0;
+    let quizScore = 0;
+    let quizAnswered = false;
+
+    // Web Audio API Synthesizer for Kid-Friendly Sound Effects
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playSoundEffect(type) {
+      try {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const now = audioCtx.currentTime;
+
+        if (type === 'correct') {
+          // Cheerful major arpeggio chime
+          [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+            gain.gain.setValueAtTime(0.18, now + idx * 0.08);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.35);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now + idx * 0.08);
+            osc.stop(now + idx * 0.08 + 0.36);
+          });
+        } else if (type === 'wrong') {
+          // Gentle soft boing
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(260, now);
+          osc.frequency.linearRampToValueAtTime(180, now + 0.25);
+          gain.gain.setValueAtTime(0.18, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.3);
+        } else if (type === 'flip') {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(420, now);
+          osc.frequency.exponentialRampToValueAtTime(620, now + 0.09);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.11);
+        }
+      } catch (e) {
+        // Fallback silently if audio context blocked
+      }
+    }
+
+    // Web Speech API (Text-to-Speech en-US)
+    function speakText(text) {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-US';
+      utterance.rate = isSlowSpeech ? 0.78 : 1.0;
+      utterance.pitch = 1.08;
+
+      // Prefer a clear English voice if available
+      const voices = window.speechSynthesis.getVoices();
+      const preferred = voices.find(v => v.lang.includes('en-US') && (v.name.includes('Google') || v.name.includes('Samantha') || v.name.includes('Natural')));
+      if (preferred) utterance.voice = preferred;
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function toggleSpeechSpeed() {
+      isSlowSpeech = !isSlowSpeech;
+      const iconEl = document.getElementById('speed-icon');
+      const labelEl = document.getElementById('speed-label');
+      if (isSlowSpeech) {
+        iconEl.textContent = '🐢';
+        labelEl.textContent = 'Đọc chậm: BẬT';
+      } else {
+        iconEl.textContent = '🐇';
+        labelEl.textContent = 'Đọc thường';
+      }
+    }
+
+    // =========================================================================
+    // 3. TAB NAVIGATION
+    // =========================================================================
+    function switchTab(tabName) {
+      const tabs = ['flashcards', 'quiz', 'grammar'];
+      const activeStyles = {
+        flashcards: ['bg-sky-500', 'text-white', 'border-sky-700', 'shadow-md'],
+        quiz: ['bg-amber-400', 'text-amber-950', 'border-amber-600', 'shadow-md'],
+        grammar: ['bg-emerald-500', 'text-white', 'border-emerald-700', 'shadow-md']
+      };
+      const inactiveStyles = ['bg-white', 'text-slate-600', 'border-slate-300'];
+
+      tabs.forEach(t => {
+        const btn = document.getElementById(`tab-${t}`);
+        const sec = document.getElementById(`section-${t}`);
+        btn.classList.remove(...activeStyles[t], ...inactiveStyles);
+
+        if (t === tabName) {
+          btn.classList.add(...activeStyles[t]);
+          sec.classList.remove('hidden');
+        } else {
+          btn.classList.add(...inactiveStyles);
+          sec.classList.add('hidden');
+        }
+      });
+
+      if (tabName === 'quiz' && quizQuestions.length === 0) {
+        initQuiz();
+      }
+    }
+
+    // =========================================================================
+    // 4. FLASHCARD LOGIC
+    // =========================================================================
+    function renderFlashcard() {
+      const item = activeList[currentIndex];
+      const cardInner = document.getElementById('flashcard-inner');
+      cardInner.classList.remove('is-flipped');
+
+      document.getElementById('fc-category-badge').textContent = item.category;
+      document.getElementById('fc-lesson-tag').textContent = item.lesson;
+      document.getElementById('fc-emoji').textContent = item.emoji;
+      document.getElementById('fc-word').textContent = item.word;
+      document.getElementById('fc-phonetic').textContent = item.phonetic;
+
+      document.getElementById('fc-back-emoji').textContent = item.emoji;
+      document.getElementById('fc-back-word').textContent = item.word;
+      document.getElementById('fc-meaning').textContent = item.meaning;
+      document.getElementById('fc-example-en').textContent = item.exampleEn;
+      document.getElementById('fc-example-vi').textContent = `(${item.exampleVi})`;
+
+      // Update counter & progress bar
+      document.getElementById('fc-counter').textContent = `Thẻ ${currentIndex + 1} / ${activeList.length}`;
+      const pct = ((currentIndex + 1) / activeList.length) * 100;
+      document.getElementById('fc-progress-bar').style.width = `${pct}%`;
+
+      // Update Learned button state
+      updateLearnedButtonUI(item.id);
+    }
+
+    function flipCard() {
+      playSoundEffect('flip');
+      document.getElementById('flashcard-inner').classList.toggle('is-flipped');
+    }
+
+    function speakCurrentWord(e) {
+      if (e) e.stopPropagation();
+      speakText(activeList[currentIndex].word);
+    }
+
+    function speakCurrentExample(e) {
+      if (e) e.stopPropagation();
+      speakText(activeList[currentIndex].exampleEn);
+    }
+
+    function nextCard() {
+      currentIndex = (currentIndex + 1) % activeList.length;
+      renderFlashcard();
+    }
+
+    function prevCard() {
+      currentIndex = (currentIndex - 1 + activeList.length) % activeList.length;
+      renderFlashcard();
+    }
+
+    function shuffleFlashcards() {
+      for (let i = activeList.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [activeList[i], activeList[j]] = [activeList[j], activeList[i]];
+      }
+      currentIndex = 0;
+      renderFlashcard();
+      playSoundEffect('flip');
+    }
+
+    function filterCategory(cat) {
+      // Update pill styles
+      document.querySelectorAll('.cat-pill').forEach(pill => {
+        if (pill.dataset.cat === cat) {
+          pill.classList.remove('bg-white', 'text-pink-700', 'text-sky-700', 'text-amber-700', 'text-emerald-700');
+          pill.classList.add('bg-slate-800', 'text-white', 'border-slate-800');
+        } else {
+          pill.classList.remove('bg-slate-800', 'text-white', 'border-slate-800');
+          pill.classList.add('bg-white');
+          if (pill.dataset.cat === 'Family') pill.classList.add('text-pink-700');
+          if (pill.dataset.cat === 'Toys & Vehicles') pill.classList.add('text-sky-700');
+          if (pill.dataset.cat === 'Animals & Adjectives') pill.classList.add('text-amber-700');
+          if (pill.dataset.cat === 'School & Bedroom') pill.classList.add('text-emerald-700');
+        }
+      });
+
+      if (cat === 'all') {
+        activeList = [...VOCAB_DATA];
+      } else {
+        activeList = VOCAB_DATA.filter(item => item.category === cat);
+      }
+      currentIndex = 0;
+      renderFlashcard();
+    }
+
+    function toggleLearned() {
+      const item = activeList[currentIndex];
+      if (learnedIds.has(item.id)) {
+        learnedIds.delete(item.id);
+      } else {
+        learnedIds.add(item.id);
+        playSoundEffect('correct');
+      }
+      updateLearnedButtonUI(item.id);
+      document.getElementById('learned-badge').textContent = `${learnedIds.size} / ${VOCAB_DATA.length}`;
+    }
+
+    function updateLearnedButtonUI(id) {
+      const btn = document.getElementById('mark-learned-btn');
+      const star = document.getElementById('learned-star-icon');
+      const text = document.getElementById('learned-btn-text');
+
+      if (learnedIds.has(id)) {
+        btn.classList.remove('bg-emerald-100', 'text-emerald-800', 'border-emerald-400');
+        btn.classList.add('bg-amber-300', 'text-amber-950', 'border-amber-500');
+        star.textContent = '⭐';
+        text.textContent = 'Đã thuộc!';
+      } else {
+        btn.classList.add('bg-emerald-100', 'text-emerald-800', 'border-emerald-400');
+        btn.classList.remove('bg-amber-300', 'text-amber-950', 'border-amber-500');
+        star.textContent = '☆';
+        text.textContent = 'Đánh dấu thuộc';
+      }
+    }
+
+    // =========================================================================
+    // 5. QUIZ LOGIC (LISTENING & GRAMMAR)
+    // =========================================================================
+    function setQuizType(type) {
+      quizType = type;
+      const btnListen = document.getElementById('qtype-listening');
+      const btnGrammar = document.getElementById('qtype-grammar');
+
+      if (type === 'listening') {
+        btnListen.className = 'flex-1 sm:flex-initial px-4 py-2 rounded-xl font-display font-bold text-sm bg-amber-400 text-amber-950 shadow-sm transition-all';
+        btnGrammar.className = 'flex-1 sm:flex-initial px-4 py-2 rounded-xl font-display font-bold text-sm text-slate-600 hover:text-slate-900 transition-all';
+      } else {
+        btnGrammar.className = 'flex-1 sm:flex-initial px-4 py-2 rounded-xl font-display font-bold text-sm bg-amber-400 text-amber-950 shadow-sm transition-all';
+        btnListen.className = 'flex-1 sm:flex-initial px-4 py-2 rounded-xl font-display font-bold text-sm text-slate-600 hover:text-slate-900 transition-all';
+      }
+      initQuiz();
+    }
+
+    function initQuiz() {
+      quizIndex = 0;
+      quizScore = 0;
+      quizAnswered = false;
+      document.getElementById('quiz-score').textContent = '0';
+      document.getElementById('quiz-active-area').classList.remove('hidden');
+      document.getElementById('quiz-result-area').classList.add('hidden');
+
+      if (quizType === 'listening') {
+        // Pick 10 random vocab items
+        const shuffled = [...VOCAB_DATA].sort(() => Math.random() - 0.5).slice(0, 10);
+        quizQuestions = shuffled.map(target => {
+          const distractors = VOCAB_DATA
+            .filter(v => v.id !== target.id)
+            .sort(() => Math.random() - 0.5)
+            .slice(0, 3);
+          const options = [target, ...distractors].sort(() => Math.random() - 0.5);
+          return { target, options };
+        });
+      } else {
+        quizQuestions = [...GRAMMAR_QUIZ_QUESTIONS].sort(() => Math.random() - 0.5);
+      }
+
+      renderQuizQuestion();
+    }
+
+    function renderQuizQuestion() {
+      quizAnswered = false;
+      const fb = document.getElementById('quiz-feedback');
+      fb.classList.add('hidden');
+
+      document.getElementById('quiz-q-counter').textContent = `Câu ${quizIndex + 1} / ${quizQuestions.length}`;
+
+      const promptBox = document.getElementById('quiz-prompt-box');
+      const grid = document.getElementById('quiz-options-grid');
+      grid.innerHTML = '';
+
+      if (quizType === 'listening') {
+        const q = quizQuestions[quizIndex];
+        promptBox.innerHTML = `
+          <p class="text-sm font-extrabold text-sky-700 uppercase mb-2">🎧 Bấm loa để nghe và chọn hình đúng nhé!</p>
+          <button onclick="speakText('${q.target.word.replace(/'/g, "\\'")}')"
+            class="btn-3d bg-sky-500 hover:bg-sky-600 text-white font-display font-bold text-xl px-7 py-3.5 rounded-2xl border-b-4 border-sky-700 shadow-md inline-flex items-center gap-2">
+            <span class="text-2xl">🔊</span>
+            <span>Nghe Từ Vựng</span>
+          </button>
+        `;
+
+        // Auto-speak question when loaded
+        setTimeout(() => speakText(q.target.word), 250);
+
+        q.options.forEach(opt => {
+          const btn = document.createElement('button');
+          btn.className = 'btn-3d bg-white hover:bg-amber-50 border-3 border-2 border-slate-200 border-b-4 rounded-2xl p-4 flex items-center gap-3 text-left transition-all shadow-sm';
+          btn.innerHTML = `
+            <span class="text-4xl shrink-0">${opt.emoji}</span>
+            <div>
+              <div class="font-display font-bold text-xl text-slate-800">${opt.word}</div>
+              <div class="text-xs font-bold text-slate-400">${opt.meaning}</div>
+            </div>
+          `;
+          btn.onclick = () => handleListeningAnswer(btn, opt.id === q.target.id, q.target);
+          grid.appendChild(btn);
+        });
+
+      } else {
+        const q = quizQuestions[quizIndex];
+        promptBox.innerHTML = `
+          <p class="text-xs font-extrabold text-emerald-700 uppercase mb-1">🧩 ${q.promptVi}</p>
+          <div class="font-display text-xl sm:text-2xl font-bold text-slate-800 my-2">
+            "${q.promptEn}"
+          </div>
+          <button onclick="speakText('${q.audioText.replace(/'/g, "\\'")}')"
+            class="btn-3d bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs px-4 py-1.5 rounded-xl border-b-2 border-emerald-700 inline-flex items-center gap-1 mt-1">
+            <span>🔊</span>
+            <span>Nghe gợi ý</span>
+          </button>
+        `;
+
+        q.options.forEach(optText => {
+          const btn = document.createElement('button');
+          btn.className = 'btn-3d bg-white hover:bg-amber-50 border-2 border-slate-200 border-b-4 rounded-2xl p-4 font-display font-bold text-xl text-slate-800 text-center transition-all shadow-sm';
+          btn.textContent = optText;
+          btn.onclick = () => handleGrammarAnswer(btn, optText === q.correct, q.correct, q.audioText);
+          grid.appendChild(btn);
+        });
+      }
+    }
+
+    function handleListeningAnswer(btnEl, isCorrect, target) {
+      if (quizAnswered) return;
+      const fb = document.getElementById('quiz-feedback');
+      fb.classList.remove('hidden');
+
+      if (isCorrect) {
+        quizAnswered = true;
+        quizScore++;
+        document.getElementById('quiz-score').textContent = quizScore;
+        playSoundEffect('correct');
+        btnEl.classList.remove('bg-white', 'border-slate-200');
+        btnEl.classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-900');
+
+        fb.className = 'mt-4 p-3.5 rounded-2xl text-center font-display font-bold text-lg bg-emerald-100 text-emerald-800 border-2 border-emerald-300';
+        fb.textContent = `🎉 Giỏi lắm! Đúng là "${target.word}" (${target.meaning})!`;
+
+        setTimeout(() => advanceQuiz(), 1300);
+      } else {
+        playSoundEffect('wrong');
+        btnEl.classList.add('bg-rose-100', 'border-rose-400', 'animate-shake');
+        fb.className = 'mt-4 p-3 rounded-2xl text-center font-display font-bold text-base bg-rose-100 text-rose-700 border-2 border-rose-300';
+        fb.textContent = '😅 Chưa đúng rồi, bé nghe lại và thử chọn lại nhé!';
+        speakText(target.word);
+        setTimeout(() => btnEl.classList.remove('animate-shake'), 400);
+      }
+    }
+
+    function handleGrammarAnswer(btnEl, isCorrect, correctText, fullAudio) {
+      if (quizAnswered) return;
+      const fb = document.getElementById('quiz-feedback');
+      fb.classList.remove('hidden');
+
+      if (isCorrect) {
+        quizAnswered = true;
+        quizScore++;
+        document.getElementById('quiz-score').textContent = quizScore;
+        playSoundEffect('correct');
+        speakText(fullAudio);
+        btnEl.classList.remove('bg-white', 'border-slate-200');
+        btnEl.classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-900');
+
+        fb.className = 'mt-4 p-3.5 rounded-2xl text-center font-display font-bold text-lg bg-emerald-100 text-emerald-800 border-2 border-emerald-300';
+        fb.textContent = `🌟 Chính xác! "${fullAudio}"`;
+
+        setTimeout(() => advanceQuiz(), 1600);
+      } else {
+        playSoundEffect('wrong');
+        btnEl.classList.add('bg-rose-100', 'border-rose-400', 'animate-shake');
+        fb.className = 'mt-4 p-3 rounded-2xl text-center font-display font-bold text-base bg-rose-100 text-rose-700 border-2 border-rose-300';
+        fb.textContent = '🤔 Chưa chính xác, thử chọn đáp án khác nhé!';
+        setTimeout(() => btnEl.classList.remove('animate-shake'), 400);
+      }
+    }
+
+    function advanceQuiz() {
+      quizIndex++;
+      if (quizIndex < quizQuestions.length) {
+        renderQuizQuestion();
+      } else {
+        showQuizResults();
+      }
+    }
+
+    function showQuizResults() {
+      document.getElementById('quiz-active-area').classList.add('hidden');
+      document.getElementById('quiz-result-area').classList.remove('hidden');
+      document.getElementById('final-score-text').textContent = `${quizScore} / ${quizQuestions.length}`;
+
+      const starsCount = Math.max(1, Math.round((quizScore / quizQuestions.length) * 5));
+      document.getElementById('result-stars').textContent = '⭐'.repeat(starsCount);
+      playSoundEffect('correct');
+      launchConfetti();
+    }
+
+    function restartQuiz() {
+      initQuiz();
+    }
+
+    // =========================================================================
+    // 6. GRAMMAR SUMMARY RENDERER
+    // =========================================================================
+    function renderGrammarCards() {
+      const container = document.getElementById('grammar-cards-container');
+      container.innerHTML = '';
+
+      GRAMMAR_PATTERNS.forEach(item => {
+        const card = document.createElement('div');
+        card.className = `rounded-3xl p-5 border-3 border-2 shadow-md flex flex-col justify-between ${item.color}`;
+
+        const examplesHtml = item.examples.map(ex => `
+          <div class="bg-white rounded-2xl p-3 border border-slate-200/80 flex items-center justify-between gap-2 shadow-xs">
+            <div>
+              <div class="font-display font-bold text-slate-800 text-base">${ex.en}</div>
+              <div class="text-xs font-semibold text-slate-500">${ex.vi}</div>
+            </div>
+            <button onclick="speakText('${ex.en.replace(/'/g, "\\'")}')"
+              class="btn-3d shrink-0 w-10 h-10 rounded-xl bg-sky-500 hover:bg-sky-600 text-white flex items-center justify-center text-lg shadow-sm border-b-2 border-sky-700"
+              title="Nghe phát âm">
+              🔊
+            </button>
+          </div>
+        `).join('');
+
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <h3 class="font-display font-bold text-lg text-slate-800">${item.title}</h3>
+              <span class="shrink-0 bg-white text-slate-700 text-xs font-extrabold px-2.5 py-1 rounded-full border border-slate-200">
+                ${item.badge}
+              </span>
+            </div>
+            <div class="bg-white/90 rounded-xl px-3 py-2 font-display font-bold text-sm text-indigo-700 border border-indigo-100 mb-2">
+              ${item.formula}
+            </div>
+            <p class="text-xs font-semibold text-slate-600 mb-3">💡 ${item.note}</p>
+          </div>
+          <div class="space-y-2">
+            ${examplesHtml}
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    // =========================================================================
+    // 7. CONFETTI CELEBRATION EFFECT
+    // =========================================================================
+    function launchConfetti() {
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const colors = ['#f43f5e', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6'];
+      const pieces = Array.from({ length: 90 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height - canvas.height,
+        w: Math.random() * 10 + 6,
+        h: Math.random() * 6 + 4,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        vy: Math.random() * 3 + 2.5,
+        vx: Math.random() * 2 - 1,
+        rot: Math.random() * 360
+      }));
+
+      let frames = 0;
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        pieces.forEach(p => {
+          p.y += p.vy;
+          p.x += p.vx;
+          p.rot += 4;
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate((p.rot * Math.PI) / 180);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+          ctx.restore();
+        });
+        frames++;
+        if (frames < 150) {
+          requestAnimationFrame(draw);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+      draw();
+    }
+
+    // Keyboard arrow shortcuts for desktop classroom teaching
+    document.addEventListener('keydown', (e) => {
+      const fcVisible = !document.getElementById('section-flashcards').classList.contains('hidden');
+      if (!fcVisible) return;
+      if (e.key === 'ArrowRight') nextCard();
+      if (e.key === 'ArrowLeft') prevCard();
+      if (e.key === ' ') {
+        e.preventDefault();
+        flipCard();
+      }
+    });
+
+    // Initialize App on Load
+    window.addEventListener('DOMContentLoaded', () => {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.getVoices();
+      }
+      renderFlashcard();
+      renderGrammarCards();
+    });
+  </script>
+</body>
+</html>
